@@ -97,8 +97,8 @@ The function supports the following `options`:
 To perform any setup or initialization, provide setup code.
 
 ```javascript
-var setup = 'var randu = require( \'@stdlib/random/base/randu\' );';
-setup += 'var pow = require( \'@stdlib/math/base/special/pow\' );';
+var setup = 'var randu = require( \'@stdlib/random-base-randu\' );';
+setup += 'var pow = require( \'@stdlib/math-base-special-pow\' );';
 
 var code = 'var x = pow( randu(), 3 );';
 code += 'if ( x !== x ) {';
@@ -122,8 +122,8 @@ function done( error, results ) {
 To perform any cleanup, provide cleanup code.
 
 ```javascript
-var setup = 'var randu = require( \'@stdlib/random/base/randu\' );';
-setup += 'var hypot = require( \'@stdlib/math/base/special/hypot\' );';
+var setup = 'var randu = require( \'@stdlib/random-base-randu\' );';
+setup += 'var hypot = require( \'@stdlib/math-base-special-hypot\' );';
 
 var code = 'var h = hypot( randu()*10, randu()*10 );';
 code += 'if ( h < 0 || h > 200 ) {';
