@@ -1,6 +1,6 @@
 {
   "name": "@stdlib/utils-timeit",
-  "version": "0.0.7",
+  "version": "0.0.0",
   "description": "Time a snippet.",
   "license": "Apache-2.0",
   "author": {
@@ -53,6 +53,7 @@
     "@stdlib/process-read-stdin": "^0.0.x",
     "@stdlib/random-base-minstd-shuffle": "^0.0.x",
     "@stdlib/streams-node-stdin": "^0.0.x",
+    "@stdlib/string-format": "^0.0.x",
     "@stdlib/time-tic": "^0.0.x",
     "@stdlib/time-toc": "^0.0.x",
     "@stdlib/utils-copy": "^0.0.x",
