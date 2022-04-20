@@ -48,6 +48,8 @@ Alternatively,
 -   If you are using Deno, visit the [`deno` branch][deno-url].
 -   For use in Observable, or in browser/node environments, use the [Universal Module Definition (UMD)][umd] build available on the [`umd` branch][umd-url].
 
+The [branches.md][branches-url] file summarizes the available branches and displays a diagram illustrating their relationships.
+
 </section>
 
 <section class="usage">
@@ -275,14 +277,10 @@ var join = require( 'path' ).join;
 var readFileSync = require( '@stdlib/fs-read-file' ).sync;
 var timeit = require( '@stdlib/utils-timeit' );
 
-var before;
-var code;
-var opts;
+var before = readFileSync( join( __dirname, 'examples', 'before.txt' ), 'utf8' );
+var code = readFileSync( join( __dirname, 'examples', 'code.txt' ), 'utf8' );
 
-before = readFileSync( join( __dirname, 'examples', 'before.txt' ), 'utf8' );
-code = readFileSync( join( __dirname, 'examples', 'code.txt' ), 'utf8' );
-
-opts = {
+var opts = {
     'iterations': 1e6,
     'repeats': 5,
     'before': before
@@ -500,6 +498,7 @@ Copyright &copy; 2016-2022. The Stdlib [Authors][stdlib-authors].
 [deno-url]: https://github.com/stdlib-js/utils-timeit/tree/deno
 [umd-url]: https://github.com/stdlib-js/utils-timeit/tree/umd
 [esm-url]: https://github.com/stdlib-js/utils-timeit/tree/esm
+[branches-url]: https://github.com/stdlib-js/utils-timeit/blob/main/branches.md
 
 [stdlib-license]: https://raw.githubusercontent.com/stdlib-js/utils-timeit/main/LICENSE
 

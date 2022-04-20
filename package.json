@@ -1,6 +1,6 @@
 {
   "name": "@stdlib/utils-timeit",
-  "version": "0.0.0",
+  "version": "0.0.7",
   "description": "Time a snippet.",
   "license": "Apache-2.0",
   "author": {
@@ -19,6 +19,7 @@
   "main": "./lib",
   "browser": "./lib/browser.js",
   "directories": {
+    "benchmark": "./benchmark",
     "doc": "./docs",
     "example": "./examples",
     "lib": "./lib",
@@ -28,7 +29,8 @@
   "scripts": {
     "test": "make test",
     "test-cov": "make test-cov",
-    "examples": "make examples"
+    "examples": "make examples",
+    "benchmark": "make benchmark"
   },
   "homepage": "https://stdlib.io",
   "repository": {
@@ -67,7 +69,11 @@
     "@stdlib/assert-is-json": "^0.0.x",
     "@stdlib/assert-is-object": "^0.0.x",
     "@stdlib/assert-is-windows": "^0.0.x",
+    "@stdlib/bench": "^0.0.x",
+    "@stdlib/math-base-assert-is-nan": "^0.0.x",
+    "@stdlib/math-base-special-hypot": "^0.0.x",
     "@stdlib/process-exec-path": "^0.0.x",
+    "@stdlib/random-base-randu": "^0.0.x",
     "@stdlib/string-replace": "^0.0.x",
     "@stdlib/string-right-trim": "^0.0.x",
     "proxyquire": "^2.0.0",

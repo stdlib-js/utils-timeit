@@ -17,36 +17,24 @@
 #/
 
 # Workflow name:
-name: test
+name: benchmark
 
 # Workflow triggers:
 on:
-  # Run workflow on a weekly schedule:
-  schedule:
-    # * is a special character in YAML so you have to quote this string
-    - cron:  '30 1 * * 6'
-
   # Allow the workflow to be manually run:
   workflow_dispatch:
-
-  # Run workflow on each push:
-  push:
 
 # Workflow jobs:
 jobs:
 
-  # Define job to run tests...
-  test:
+  # Define a job to run benchmarks:
+  benchmark:
 
-    # Define display name:
-    name: 'Run tests'
+    # Define a display name:
+    name: 'Run benchmarks'
 
     # Define the type of virtual host machine:
     runs-on: 'ubuntu-latest'
-
-    # Define environment variables:
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
     # Define the sequence of job steps...
     steps:
@@ -64,29 +52,11 @@ jobs:
 
       # Install dependencies:
       - name: 'Install production and development dependencies'
-        id: install
         run: |
           npm install || npm install || npm install
         timeout-minutes: 15
 
-      # Build native add-on if present:
-      - name: 'Build native add-on (if present)'
+      # Run benchmarks:
+      - name: 'Run benchmarks'
         run: |
-          if [ -f "binding.gyp" ]; then
-            npm install node-gyp --no-save && ./node_modules/.bin/node-gyp rebuild
-          fi
-
-      # Run tests:
-      - name: 'Run tests'
-        id: tests
-        run: |
-          npm test || npm test || npm test
-
-      # Send status to Slack channel if job fails:
-      - name: 'Send status to Slack channel in case of failure'
-        uses: act10ns/slack@v1
-        with:
-          status: ${{ job.status }}
-          steps: ${{ toJson(steps) }}
-          channel: '#npm-ci'
-        if: failure()
+          npm run benchmark
