@@ -18,6 +18,17 @@ limitations under the License.
 
 -->
 
+
+<details>
+  <summary>
+    About stdlib...
+  </summary>
+  <p>We believe in a future in which the web is a preferred environment for numerical computation. To help realize this future, we've built stdlib. stdlib is a standard library, with an emphasis on numerical and scientific computation, written in JavaScript (and C) for execution in browsers and in Node.js.</p>
+  <p>The library is fully decomposable, being architected in such a way that you can swap out and mix and match APIs and functionality to cater to your exact preferences and use cases.</p>
+  <p>When you use stdlib, you can be absolutely certain that you are using the most thorough, rigorous, well-written, studied, documented, tested, measured, and high-quality code out there.</p>
+  <p>To join us in bringing numerical computing to the web, get started by checking us out on <a href="https://github.com/stdlib-js/stdlib">GitHub</a>, and please consider <a href="https://opencollective.com/stdlib">financially supporting stdlib</a>. We greatly appreciate your continued support!</p>
+</details>
+
 # timeit
 
 [![NPM version][npm-image]][npm-url] [![Build Status][test-image]][test-url] [![Coverage Status][coverage-image]][coverage-url] <!-- [![dependencies][dependencies-image]][dependencies-url] -->
@@ -34,14 +45,31 @@ limitations under the License.
 
 <!-- Package usage documentation. -->
 
+<section class="installation">
 
+## Installation
+
+```bash
+npm install @stdlib/utils-timeit
+```
+
+Alternatively,
+
+-   To load the package in a website via a `script` tag without installation and bundlers, use the [ES Module][es-module] available on the [`esm` branch][esm-url].
+-   If you are using Deno, visit the [`deno` branch][deno-url].
+-   For use in Observable, or in browser/node environments, use the [Universal Module Definition (UMD)][umd] build available on the [`umd` branch][umd-url].
+-   To use as a general utility for the command line, install the corresponding [CLI package][cli-section] globally.
+
+The [branches.md][branches-url] file summarizes the available branches and displays a diagram illustrating their relationships.
+
+</section>
 
 <section class="usage">
 
 ## Usage
 
 ```javascript
-import timeit from 'https://cdn.jsdelivr.net/gh/stdlib-js/utils-timeit@deno/mod.js';
+var timeit = require( '@stdlib/utils-timeit' );
 ```
 
 #### timeit( code, \[options,] clbk )
@@ -258,8 +286,8 @@ function after( state, next ) {
 
 ```javascript
 var join = require( 'path' ).join;
-var readFileSync = require( 'https://cdn.jsdelivr.net/gh/stdlib-js/fs-read-file' ).sync;
-import timeit from 'https://cdn.jsdelivr.net/gh/stdlib-js/utils-timeit@deno/mod.js';
+var readFileSync = require( '@stdlib/fs-read-file' ).sync;
+var timeit = require( '@stdlib/utils-timeit' );
 
 var before = readFileSync( join( __dirname, 'examples', 'before.txt' ), 'utf8' );
 var code = readFileSync( join( __dirname, 'examples', 'code.txt' ), 'utf8' );
@@ -286,7 +314,114 @@ function done( error, results ) {
 
 <!-- Section for describing a command-line interface. -->
 
+* * *
 
+<section class="cli">
+
+## CLI
+
+<section class="installation">
+
+## Installation
+
+To use as a general utility, install the CLI package globally
+
+```bash
+npm install -g @stdlib/utils-timeit-cli
+```
+
+</section>
+<!-- CLI usage documentation. -->
+
+
+<section class="usage">
+
+### Usage
+
+```text
+Usage: timeit [options] [<code>]
+
+Options:
+
+  -h,    --help                Print this message.
+  -V,    --version             Print the package version.
+         --iterations iter     Number of iterations.
+         --repeats repeats     Number of repeats. Default: 3.
+         --before setup        Setup code.
+         --after cleanup       Cleanup code.
+         --async               Time asynchronous code.
+         --format fmt          Output format: pretty, csv, json. Default: pretty.
+```
+
+</section>
+
+<!-- /.usage -->
+
+<!-- CLI usage notes. Make sure to keep an empty line after the `section` element and another before the `/section` close. -->
+
+<section class="notes">
+
+### Notes
+
+-   When the output format is `csv`, the output consists of **only** raw timing results.
+-   If not explicitly provided `--iterations`, the implementation tries successive powers of `10` until the total time is at least `0.1` seconds.
+
+</section>
+
+<!-- /.notes -->
+
+<!-- CLI usage examples. -->
+
+<section class="examples">
+
+### Examples
+
+```bash
+$ timeit "$(cat ./examples/code.txt)" --before "$(cat ./examples/before.txt)" --iterations 1000000
+
+iterations: 1000000
+repeats: 3
+iterations/s: 7261975.851461222
+elapsed time: 0.13770357 sec
+lower bound: 0.13770357 usec/iteration
+```
+
+To output results as JSON,
+
+```bash
+$ timeit "$(cat ./examples/code.txt)" --before "$(cat ./examples/before.txt)" --iterations 1000000 --format json
+{"iterations":1000000,"repeats":3,"min":[0,132431806],"elapsed":0.132431806,"rate":7551056.1261997735,"times":[[0,142115140],[0,132431806],[0,134808376]]}
+```
+
+To output results as comma-separated values ([CSV][csv]),
+
+```bash
+$ timeit "$(cat ./examples/code.txt)" --before "$(cat ./examples/before.txt)" --iterations 1000000 --format csv
+seconds,nanoseconds
+0,139365407
+0,138033545
+0,135175834
+```
+
+To use as part of a pipeline,
+
+```bash
+$ cat ./examples/code.txt | timeit --before "$(cat ./examples/before.txt)" --iterations 1000000
+
+iterations: 1000000
+repeats: 3
+iterations/s: 7433536.674260073
+elapsed time: 0.134525468 sec
+lower bound: 0.134525468 usec/iteration
+```
+
+</section>
+
+<!-- /.examples -->
+
+</section>
+
+<!-- /.cli -->
 
 <!-- Section to include cited references. If references are included, add a horizontal rule *before* the section. Make sure to keep an empty line after the `section` element and another before the `/section` close. -->
 
@@ -319,7 +454,7 @@ function done( error, results ) {
 
 ## Notice
 
-This package is part of [stdlib][stdlib], a standard library with an emphasis on numerical and scientific computing. The library provides a collection of robust, high performance libraries for mathematics, statistics, streams, utilities, and more.
+This package is part of [stdlib][stdlib], a standard library for JavaScript and Node.js, with an emphasis on numerical and scientific computing. The library provides a collection of robust, high performance libraries for mathematics, statistics, streams, utilities, and more.
 
 For more information on the project, filing bug reports and feature requests, and guidance on how to develop [stdlib][stdlib], see the main project [repository][stdlib].
 
@@ -349,8 +484,8 @@ Copyright &copy; 2016-2023. The Stdlib [Authors][stdlib-authors].
 [npm-image]: http://img.shields.io/npm/v/@stdlib/utils-timeit.svg
 [npm-url]: https://npmjs.org/package/@stdlib/utils-timeit
 
-[test-image]: https://github.com/stdlib-js/utils-timeit/actions/workflows/test.yml/badge.svg?branch=main
-[test-url]: https://github.com/stdlib-js/utils-timeit/actions/workflows/test.yml?query=branch:main
+[test-image]: https://github.com/stdlib-js/utils-timeit/actions/workflows/test.yml/badge.svg?branch=v0.1.0
+[test-url]: https://github.com/stdlib-js/utils-timeit/actions/workflows/test.yml?query=branch:v0.1.0
 
 [coverage-image]: https://img.shields.io/codecov/c/github/stdlib-js/utils-timeit/main.svg
 [coverage-url]: https://codecov.io/github/stdlib-js/utils-timeit?branch=main
