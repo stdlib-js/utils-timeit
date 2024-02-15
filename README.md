@@ -45,282 +45,25 @@ limitations under the License.
 
 <!-- Package usage documentation. -->
 
-<section class="installation">
 
-## Installation
 
-```bash
-npm install @stdlib/utils-timeit
-```
 
-Alternatively,
-
--   To load the package in a website via a `script` tag without installation and bundlers, use the [ES Module][es-module] available on the [`esm`][esm-url] branch (see [README][esm-readme]).
--   If you are using Deno, visit the [`deno`][deno-url] branch (see [README][deno-readme] for usage intructions).
--   For use in Observable, or in browser/node environments, use the [Universal Module Definition (UMD)][umd] build available on the [`umd`][umd-url] branch (see [README][umd-readme]).
--   To use as a general utility for the command line, install the corresponding [CLI package][cli-section] globally.
-
-The [branches.md][branches-url] file summarizes the available branches and displays a diagram illustrating their relationships.
-
-To view installation and usage instructions specific to each branch build, be sure to explicitly navigate to the respective README files on each branch, as linked to above.
-
-</section>
-
-<section class="usage">
-
-## Usage
-
-```javascript
-var timeit = require( '@stdlib/utils-timeit' );
-```
-
-#### timeit( code, \[options,] clbk )
-
-Times a snippet.
-
-```javascript
-var code = 'var x = Math.pow( Math.random(), 3 );';
-code += 'if ( x !== x ) {';
-code += 'throw new Error( \'Something went wrong.\' );';
-code += '}';
-
-timeit( code, done );
-
-function done( error, results ) {
-    if ( error ) {
-        throw error;
-    }
-    console.dir( results );
-    /* e.g., =>
-        {
-            'iterations': 1000000,
-            'repeats': 3,
-            'min': [0,135734733],       // [seconds,nanoseconds]
-            'elapsed': 0.135734733,     // seconds
-            'rate': 7367311.062526641,  // iterations/second
-            'times': [                  // raw timing results
-                [0,145641393],
-                [0,135734733],
-                [0,140462721]
-            ]
-        }
-    */
-}
-```
-
-The function supports the following `options`:
-
--   **before**: setup code. Default: `""`.
--   **after**: cleanup code. Default: `""`.
--   **iterations**: number of iterations. If `null`, the number of iterations is determined by trying successive powers of `10` until the total time is at least `0.1` seconds. Default: `1e6`.
--   **repeats**: number of repeats. Default: `3`.
--   **asynchronous**: `boolean` indicating whether a snippet is asynchronous. Default: `false`.
-
-To perform any setup or initialization, provide setup code.
-
-```javascript
-var setup = 'var randu = require( \'@stdlib/random-base-randu\' );';
-setup += 'var pow = require( \'@stdlib/math-base-special-pow\' );';
-
-var code = 'var x = pow( randu(), 3 );';
-code += 'if ( x !== x ) {';
-code += 'throw new Error( \'Something went wrong.\' );';
-code += '}';
-
-var opts = {
-    'before': setup
-};
-
-timeit( code, opts, done );
-
-function done( error, results ) {
-    if ( error ) {
-        throw error;
-    }
-    console.dir( results );
-}
-```
-
-To perform any cleanup, provide cleanup code.
-
-```javascript
-var setup = 'var randu = require( \'@stdlib/random-base-randu\' );';
-setup += 'var hypot = require( \'@stdlib/math-base-special-hypot\' );';
-
-var code = 'var h = hypot( randu()*10, randu()*10 );';
-code += 'if ( h < 0 || h > 200 ) {';
-code += 'throw new Error( \'Something went wrong.\' );';
-code += '}';
-
-var cleanup = 'if ( h !== h ) {';
-cleanup += 'throw new Error( \'Something went wrong.\' );';
-cleanup += '}';
-
-var opts = {
-    'before': setup,
-    'after': cleanup
-};
-
-timeit( code, opts, done );
-
-function done( error, results ) {
-    if ( error ) {
-        throw error;
-    }
-    console.dir( results );
-}
-```
-
-To time an asynchronous snippet, set the `asynchronous` option to `true`.
-
-```javascript
-var code = 'var x = Math.pow( Math.random(), 3 );';
-code += 'if ( x !== x ) {';
-code += 'var err = new Error( \'Something went wrong.\' );';
-code += 'next( err );';
-code += '}';
-code += 'process.nextTick( next );';
-
-var opts = {
-    'iterations': 1e2,
-    'asynchronous': true
-};
-
-timeit( code, opts, done );
-
-function done( error, results ) {
-    if ( error ) {
-        throw error;
-    }
-    console.dir( results );
-}
-```
-
-If `asynchronous` is `true`, the implementation assumes that `before`, `after`, and `code` snippets are **all** asynchronous. Accordingly, these snippets should invoke a `next( [error] )` callback once complete. For example, given the following snippet,
-
-<!-- run-disable -->
-
-<!-- eslint-disable -->
-
-```javascript
-setTimeout( done, 0 );
-
-function done( error ) {
-    if ( error ) {
-        return next( error );
-    }
-    next();
-}
-```
-
-the implementation wraps the snippet within a function having the following signature
-
-```javascript
-function wrapped( state, next ) {
-    setTimeout( done, 0 );
-
-    function done( error ) {
-        if ( error ) {
-            return next( error );
-        }
-        next();
-    }
-}
-```
-
-The `state` parameter is simply an empty `{}` which allows the `before`, `after`, and `code` snippets to share state.
-
-```javascript
-function before( state, next ) {
-    state.counter = 0;
-}
-
-function code( state, next ) {
-    setTimeout( done, 0 );
-
-    function done( error ) {
-        if ( error ) {
-            return next( error );
-        }
-        state.counter += 1;
-        next();
-    }
-}
-
-function after( state, next ) {
-    var err;
-    if ( state.counter !== state.counter ) {
-        err = new Error( 'Something went wrong!' );
-        return next( err );
-    }
-    next();
-}
-```
-
-</section>
-
-<!-- /.usage -->
 
 <!-- Package usage notes. Make sure to keep an empty line after the `section` element and another before the `/section` close. -->
 
-<section class="notes">
 
-## Notes
-
--   Snippets **always** run in [strict mode][strict-mode].
--   **Always** verify results. Doing so prevents the compiler from performing dead code elimination and other optimization techniques, which would render timing results meaningless.
--   Executed code is **not** sandboxed and has access to the global state. You are **strongly** advised **against** timing untrusted code. To time untrusted code, do so in an isolated environment (e.g., a separate process with restricted access to both global state and the host environment).
--   Wrapping asynchronous code **does** add overhead, but, in most cases, the overhead should be negligible compared to the execution cost of the timed snippet.
--   Ensure that, when `asynchronous` is `true`, the main `code` snippet is actually asynchronous. If a snippet releases the [zalgo][zalgo], an error complaining about exceeding the maximum call stack size is highly likely.
--   While many benchmark frameworks calculate various statistics over raw timing results (e.g., mean and standard deviation), do **not** do this. Instead, consider the fastest time an approximate lower bound for how fast an environment can execute a snippet. Slower times are more likely attributable to other processes interfering with timing accuracy rather than attributable to variability in JavaScript's speed. In which case, the minimum time is most likely the only result of interest. When considering all raw timing results, apply common sense rather than statistics.
-
-</section>
-
-<!-- /.notes -->
 
 <!-- Package usage examples. -->
 
-<section class="examples">
 
-## Examples
-
-<!-- eslint no-undef: "error" -->
-
-```javascript
-var join = require( 'path' ).join;
-var readFileSync = require( '@stdlib/fs-read-file' ).sync;
-var timeit = require( '@stdlib/utils-timeit' );
-
-var before = readFileSync( join( __dirname, 'examples', 'before.txt' ), 'utf8' );
-var code = readFileSync( join( __dirname, 'examples', 'code.txt' ), 'utf8' );
-
-var opts = {
-    'iterations': 1e6,
-    'repeats': 5,
-    'before': before
-};
-
-timeit( code, opts, done );
-
-function done( error, results ) {
-    if ( error ) {
-        throw error;
-    }
-    console.dir( results );
-}
-```
-
-</section>
-
-<!-- /.examples -->
 
 <!-- Section for describing a command-line interface. -->
 
-* * *
+
 
 <section class="cli">
 
-## CLI
+
 
 <section class="installation">
 
@@ -338,7 +81,7 @@ npm install -g @stdlib/utils-timeit-cli
 
 <section class="usage">
 
-### Usage
+## Usage
 
 ```text
 Usage: timeit [options] [<code>]
@@ -363,7 +106,7 @@ Options:
 
 <section class="notes">
 
-### Notes
+## Notes
 
 -   When the output format is `csv`, the output consists of **only** raw timing results.
 -   If not explicitly provided `--iterations`, the implementation tries successive powers of `10` until the total time is at least `0.1` seconds.
@@ -376,7 +119,7 @@ Options:
 
 <section class="examples">
 
-### Examples
+## Examples
 
 ```bash
 $ timeit "$(cat ./examples/code.txt)" --before "$(cat ./examples/before.txt)" --iterations 1000000
@@ -443,6 +186,11 @@ lower bound: 0.134525468 usec/iteration
 
 <section class="related">
 
+## See Also
+
+-   <span class="package-name">[`@stdlib/utils-timeit`][@stdlib/utils-timeit]</span><span class="delimiter">: </span><span class="description">time a snippet.</span>
+
+
 </section>
 
 <!-- /.related -->
@@ -460,7 +208,7 @@ This package is part of [stdlib][stdlib], a standard library for JavaScript and 
 
 For more information on the project, filing bug reports and feature requests, and guidance on how to develop [stdlib][stdlib], see the main project [repository][stdlib].
 
-#### Community
+### Community
 
 [![Chat][chat-image]][chat-url]
 
@@ -483,8 +231,8 @@ Copyright &copy; 2016-2024. The Stdlib [Authors][stdlib-authors].
 
 <section class="links">
 
-[npm-image]: http://img.shields.io/npm/v/@stdlib/utils-timeit.svg
-[npm-url]: https://npmjs.org/package/@stdlib/utils-timeit
+[npm-image]: http://img.shields.io/npm/v/@stdlib/utils-timeit-cli.svg
+[npm-url]: https://npmjs.org/package/@stdlib/utils-timeit-cli
 
 [test-image]: https://github.com/stdlib-js/utils-timeit/actions/workflows/test.yml/badge.svg?branch=v0.2.2
 [test-url]: https://github.com/stdlib-js/utils-timeit/actions/workflows/test.yml?query=branch:v0.2.2
