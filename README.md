@@ -52,7 +52,7 @@ limitations under the License.
 ## Usage
 
 ```javascript
-import timeit from 'https://cdn.jsdelivr.net/gh/stdlib-js/utils-timeit@esm/index.mjs';
+import timeit from 'https://cdn.jsdelivr.net/gh/stdlib-js/utils-timeit@v0.2.3-esm/index.mjs';
 ```
 
 #### timeit( code, \[options,] clbk )
@@ -275,7 +275,7 @@ function after( state, next ) {
 
 var join = require( 'path' ).join;
 var readFileSync = require( 'https://cdn.jsdelivr.net/gh/stdlib-js/fs-read-file' ).sync;
-import timeit from 'https://cdn.jsdelivr.net/gh/stdlib-js/utils-timeit@esm/index.mjs';
+import timeit from 'https://cdn.jsdelivr.net/gh/stdlib-js/utils-timeit@v0.2.3-esm/index.mjs';
 
 var before = readFileSync( join( __dirname, 'examples', 'before.txt' ), 'utf8' );
 var code = readFileSync( join( __dirname, 'examples', 'code.txt' ), 'utf8' );
