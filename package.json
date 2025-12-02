@@ -41,6 +41,7 @@
     "url": "https://github.com/stdlib-js/stdlib/issues"
   },
   "dependencies": {
+    "@stdlib/array-base-nulls": "github:stdlib-js/array-base-nulls#main",
     "@stdlib/assert-has-own-property": "^0.2.2",
     "@stdlib/assert-is-array": "^0.2.2",
     "@stdlib/assert-is-boolean": "^0.2.2",
