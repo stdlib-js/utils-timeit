@@ -52,6 +52,11 @@ limitations under the License.
 ## Usage
 
 ```javascript
+import timeit from 'https://cdn.jsdelivr.net/gh/stdlib-js/utils-timeit@esm/index.mjs';
+```
+The previous example will load the latest bundled code from the esm branch. Alternatively, you may load a specific version by loading the file from one of the [tagged bundles](https://github.com/stdlib-js/utils-timeit/tags). For example,
+
+```javascript
 import timeit from 'https://cdn.jsdelivr.net/gh/stdlib-js/utils-timeit@v0.2.4-esm/index.mjs';
 ```
 
@@ -275,7 +280,7 @@ function after( state, next ) {
 
 var join = require( 'path' ).join;
 var readFileSync = require( 'https://cdn.jsdelivr.net/gh/stdlib-js/fs-read-file' ).sync;
-import timeit from 'https://cdn.jsdelivr.net/gh/stdlib-js/utils-timeit@v0.2.4-esm/index.mjs';
+import timeit from 'https://cdn.jsdelivr.net/gh/stdlib-js/utils-timeit@esm/index.mjs';
 
 var before = readFileSync( join( __dirname, 'examples', 'before.txt' ), 'utf8' );
 var code = readFileSync( join( __dirname, 'examples', 'code.txt' ), 'utf8' );
