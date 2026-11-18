@@ -28,7 +28,7 @@ var readFileSync = require( '@stdlib/fs-read-file' ).sync;
 var CLI = require( '@stdlib/cli-ctor' );
 var stdinStream = require( '@stdlib/streams-node-stdin' );
 var nextTick = require( '@stdlib/utils-next-tick' );
-var timeit = require( './../lib' );
+var timeit = require( '@stdlib/utils-timeit' );
 
 
 // FUNCTIONS //
